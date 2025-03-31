@@ -8,14 +8,6 @@
     font-style: normal;
 }
 
-@font-face {
-    font-family: 'Fatalist';
-    src: url('path/to/your/fatalist-font.woff2') format('woff2'),
-         url('path/to/your/fatalist-font.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
 * {
     margin: 0;
     padding: 0;
@@ -25,13 +17,18 @@
 
 :root {
     /* Color palette */
+    /* @tweakable Primary color of the app */
     --primary-color: #000;
+    /* @tweakable Secondary color used for text and icons */
     --secondary-color: #8e8e93;
+    /* @tweakable Background color of the app */
     --bg-color: #fff;
+    /* @tweakable Background color for tabs */
     --tab-bg: #f2f2f7;
+    /* @tweakable Background color for active tabs */
     --active-tab-bg: #e5e5ea;
-    
-    /* Card colors simplified */
+
+    /* @tweakable Card colors */
     --card-colors: {
         blue: #d1e7f7,
         orange: #ff9500,
@@ -39,15 +36,21 @@
         white: #f2f2f7,
         purple: #af52de
     };
-    
+
     /* Consistent sizing and spacing */
+    /* @tweakable Radius of card corners */
     --card-radius: 12px;
+    /* @tweakable Color of shadows */
     --shadow-color: rgba(0, 0, 0, 0.1);
+    /* @tweakable Base spacing unit */
     --base-spacing: 16px;
+    /* @tweakable Font family for small text elements */
     --small-font: 'NauryzRedKeds', sans-serif;
-    /* Add new font variables */
-    --header-font: 'Fatalist', serif;
+    /* @tweakable Font family for headers */
+    --header-font: 'Fatalist', serif; /* Consider removing if not used */
+    /* @tweakable Font family for titles */
     --title-font: 'Oswald', sans-serif;
+    /* @tweakable Font family for body text */
     --body-font: 'Roboto Slab', serif;
 }
 
@@ -151,27 +154,19 @@ body {
     margin-right: 5px;
 }
 
-.profile-circle {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.9);
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-    border: 2px solid white;
-    overflow: hidden;
-}
-
 header {
     padding: 20px 16px;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.title-container {
+    padding-left: 16px;
 }
 
 .back-button {
@@ -264,17 +259,25 @@ header {
     cursor: default;
     scroll-behavior: auto;
     overscroll-behavior-x: auto;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Flexible grid layout */
 }
 
 /* Adjust the grid for larger screens */
-.card-grid {
-    grid-template-columns: repeat(3, 1fr); /* Three columns on larger screens */
-}
-
 /* Media query for smaller screens (e.g., mobile) */
 @media (max-width: 480px) {
     .card-grid {
         grid-template-columns: repeat(2, 1fr); /* Two columns on smaller screens */
+    }
+}
+
+/* Media query for larger screens (desktop) */
+@media (min-width: 768px) {
+    .app-container {
+        max-width: 1200px; /* Increased max-width for larger screens */
+    }
+
+    .card-grid {
+        grid-template-columns: repeat(4, 1fr); /* Four columns on larger screens */
     }
 }
 
@@ -286,6 +289,8 @@ header {
     width: 100%;
     min-width: auto;
     transition: none;
+    position: relative;
+    cursor: pointer;
 }
 
 .card-title {
@@ -308,12 +313,117 @@ header {
     font-family: var(--small-font);
 }
 
+.card-popup-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    border-radius: var(--card-radius);
+}
+
+.card.active .card-popup-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.popup-sphere {
+    /* @tweakable Size of the clickable sphere */
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* @tweakable Animation duration for sphere hover effect */
+    transition: transform 0.2s ease;
+    cursor: pointer;
+}
+
+.popup-sphere:hover {
+    transform: scale(1.1);
+}
+
+.popup-sphere i {
+    /* @tweakable Size of the arrow icon */
+    font-size: 24px;
+    /* @tweakable Color of the arrow icon */
+    color: #000;
+}
+
+.card-details {
+    background: var(--bg-color);
+    border-radius: var(--card-radius);
+    padding: 20px;
+    height: 100%;
+    opacity: 0;
+    transform: translateX(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    display: none;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    max-width: calc(100vw - 32px);
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+.card-details.active {
+    opacity: 1;
+    transform: translateX(0);
+    display: block;
+}
+
+.card-details-title {
+    font-family: var(--title-font);
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.card-details-description {
+    font-family: var(--body-font);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--secondary-color);
+}
+
+/* Media query for mobile devices */
+@media (max-width: 480px) {
+    .card-details {
+        padding: 15px;
+        font-size: 14px;
+        max-height: 200px;
+    }
+
+    .card-details-title {
+        font-size: 16px;
+    }
+
+    .card-details-description {
+        font-size: 13px;
+        line-height: 1.4;
+    }
+}
+
 .bottom-nav {
     display: flex;
     justify-content: space-around;
     padding: 15px 0 20px;
     background-color: var(--bg-color);
     border-top: 1px solid rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
 }
 
 .nav-item {
@@ -340,9 +450,9 @@ header {
     color: var(--primary-color);
 }
 
-@media (max-width: 390px), 
-       (max-width: 375px), 
-       (max-width: 320px), 
+@media (max-width: 390px),
+       (max-width: 375px),
+       (max-width: 320px),
        (min-width: 481px) {
     .card {
         min-width: auto;
