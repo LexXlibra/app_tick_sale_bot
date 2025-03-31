@@ -115,5 +115,16 @@
 
     <script src="config.js"></script>
     <script src="app.js"></script>
+    <script> 
+        // Функция для создания ярлыка
+        function addToHomeScreen() {
+            if (Telegram.WebApp) {
+                Telegram.WebApp.addToHomeScreen({
+                    title: "Ticket Sale", // Название ярлыка
+                    icon: "https://icons.iconarchive.com/icons/pictogrammers/material/256/ticket-confirmation-icon.png" // Иконка (512x512px)
+                });
+            }
+        }
+    </script>
 </body>
 </html>
