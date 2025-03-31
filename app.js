@@ -45,16 +45,48 @@ document.addEventListener('DOMContentLoaded', () => {
             this.config.cardData.forEach((card, index) => {
                 cardGrid.innerHTML += this.createCardHTML(card, index);
             });
+            
+            // Add load more button
+            cardGrid.innerHTML += this.createLoadMoreButton();
+        }
+        
+        createLoadMoreButton() {
+            /* @tweakable Load more button background color */
+            const LOAD_MORE_BG_COLOR = 'rgba(0, 0, 0, 0.05)';
+            /* @tweakable Load more button icon size */
+            const LOAD_MORE_ICON_SIZE = '24px';
+            /* @tweakable Load more button corner radius */
+            const LOAD_MORE_RADIUS = 'var(--card-radius)';
+            /* @tweakable Load more button hover effect intensity */
+            const LOAD_MORE_HOVER_SCALE = '1.1';
+            
+            return `
+                <div class="card load-more-card" id="loadMoreButton">
+                    <div class="load-more-container" style="background-color: ${LOAD_MORE_BG_COLOR}; border-radius: ${LOAD_MORE_RADIUS};">
+                        <i class="fas fa-sync-alt" style="font-size: ${LOAD_MORE_ICON_SIZE};"></i>
+                    </div>
+                    <div class="card-title text-truncate">Загрузить ещё</div>
+                    <div class="card-subtitle">Показать больше событий</div>
+                </div>
+            `;
         }
 
         createCardHTML(cardData, index) {
             const convertedTime = this.formatDate(cardData.badge);
+            /* @tweakable Price prefix */
+            const pricePrefix = "от ";
+            /* @tweakable Currency symbol */
+            const currencySymbol = "₽";
+            /* @tweakable Separator between date and time in badge */
+            const dateTimeSeparator = " ";
+            /* @tweakable Time prefix in card badge */
+            const timePrefix = "В ";
 
             return `
                 <div class="card">
                     <div class="card-image" style="background-image: ${cardData.background}">
-                        <span class="badge time-badge"><i class="far fa-calendar-alt"></i>${convertedTime}</span>
-                        ${this.renderBadges(cardData)}
+                        <span class="badge time-badge"><i class="far fa-calendar-alt"></i>${convertedTime}${cardData.time ? dateTimeSeparator + timePrefix + this.convertTo24HourFormat(cardData.time) : ''}</span>
+                        ${this.renderBadges(cardData, pricePrefix, currencySymbol)}
                         <div class="card-popup-overlay">
                             <div class="popup-sphere">
                                 <i class="fas fa-arrow-right"></i>
@@ -68,14 +100,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         setupCardInteractions() {
-            const cards = document.querySelectorAll('.card');
+            const cards = document.querySelectorAll('.card:not(.load-more-card)');
             cards.forEach((card, index) => {
                 card.addEventListener('click', () => this.handleCardClick(card, index));
             });
+
+            // Setup load more button click
+            const loadMoreBtn = document.getElementById('loadMoreButton');
+            if (loadMoreBtn) {
+                loadMoreBtn.addEventListener('click', () => {
+                    /* @tweakable Number of new cards to load */
+                    const CARDS_TO_LOAD = 3;
+                    alert(`Загрузка дополнительных ${CARDS_TO_LOAD} мероприятий...`);
+                    // Actual loading logic would go here
+                });
+            }
         }
 
         handleCardClick(card, index) {
             if (this.activeCard === card) return;
+
+            // Check if a card is already active and a different card is clicked
+            if (this.activeCard && this.activeCard !== card) {
+                this.hideCardDetails();
+                this.activeCard = null; // Reset activeCard to prevent immediate details display
+                return; // Exit to prevent showing details for this click
+            }
 
             // Clear any existing hide timeout
             if (this.hideTimeout) {
@@ -93,13 +143,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Calculate which side to show details
             const isRightSide = index % 2 === 0;
-            let targetCard = isRightSide ? 
-                card.nextElementSibling : 
+            let targetCard = isRightSide ?
+                card.nextElementSibling :
                 card.previousElementSibling;
 
             // If there's no adjacent card, create a temporary one
             if (!targetCard) {
                 targetCard = this.createTemporaryCard(card, isRightSide);
+            }
+
+            // Set arrow direction based on details position
+            const arrow = card.querySelector('.popup-sphere i');
+            if (arrow) {
+                /* @tweakable Arrow direction classes */
+                arrow.className = isRightSide ? 'fas fa-arrow-right' : 'fas fa-arrow-left';
             }
 
             this.showCardDetails(targetCard, this.config.cardData[index]);
@@ -182,8 +239,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (details) {
                     details.classList.remove('active');
                     /* @tweakable Animation duration for hiding details */
-                    const ANIMATION_DURATION = 300;
-                    
+                    const ANIMATION_DURATION = this.config.animations.hideDetailsDuration; // Use config value for animation duration
+
                     setTimeout(() => {
                         const parentCard = details.closest('.card');
                         if (parentCard) {
@@ -201,9 +258,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         showCardDetails(targetCard, cardData) {
-            // Remove existing content
+            // Store original content only if it's not the load more button
+            const isLoadMoreButton = targetCard.classList.contains('load-more-card');
             const originalContent = targetCard.innerHTML;
-        
+            
             // Create details panel
             const details = document.createElement('div');
             details.className = 'card-details';
@@ -217,6 +275,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // Replace content
             targetCard.innerHTML = '';
             targetCard.appendChild(details);
+            
+            // Store original content for restoration, but only if it's not the load more button
+            if (!isLoadMoreButton) {
+                targetCard.dataset.originalContent = originalContent;
+            }
         
             // Animate in
             requestAnimationFrame(() => {
@@ -252,13 +315,32 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        renderBadges(cardData) {
+        renderBadges(cardData, pricePrefix = "от ", currencySymbol = "₽") {
             return `
-                ${cardData.price ? `<span class="badge price-badge"><i class="fas fa-tag"></i>${cardData.price}</span>` : ''}
+                ${cardData.price && cardData.price !== "Бесплатно" ? `<span class="badge price-badge"><i class="fas fa-tag"></i>${pricePrefix}${cardData.price}${currencySymbol}</span>` : (cardData.price === "Бесплатно" ? `<span class="badge price-badge"><i class="fas fa-tag"></i>${cardData.price}</span>` : '')}
             `;
         }
 
         restoreOriginalContent(card) {
+            // Check if it's the load more button card
+            if (card.classList.contains('load-more-card')) {
+                // Re-generate the load more button
+                card.innerHTML = this.createLoadMoreButton();
+                
+                // Re-attach event listener to the new button
+                const loadMoreBtn = document.getElementById('loadMoreButton');
+                if (loadMoreBtn) {
+                    loadMoreBtn.addEventListener('click', () => {
+                        /* @tweakable Number of new cards to load */
+                        const CARDS_TO_LOAD = 3;
+                        alert(`Загрузка дополнительных ${CARDS_TO_LOAD} мероприятий...`);
+                        // Actual loading logic would go here
+                    });
+                }
+                return;
+            }
+            
+            // For regular cards
             const cardData = this.config.cardData[Array.from(card.parentElement.children).indexOf(card)];
             if (cardData) {
                 card.innerHTML = this.createCardHTML(cardData, Array.from(card.parentElement.children).indexOf(card));
