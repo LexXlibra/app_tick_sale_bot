@@ -21,8 +21,8 @@ const config = {
     navigation: [
         { icon: "home", /* @tweakable Label for the Home navigation item */ label: "Главная", active: true },
         { icon: "search", /* @tweakable Label for the Search navigation item */ label: "Поиск" },
-        { icon: "plus-circle", /* @tweakable Label for the Add navigation item */ label: "Добавить" },
         { icon: "heart", /* @tweakable Label for the Favorites navigation item */ label: "Избранное" },
+        { icon: "ticket-alt", /* @tweakable Label for the Tickets navigation item */ label: "Билеты" },
         { icon: "user", /* @tweakable Label for the Profile navigation item */ label: "Профиль" }
     ],
 
@@ -47,9 +47,11 @@ const config = {
             /* @tweakable Badge text for the first card */
             badge: "Завтра",
             /* @tweakable Price for the first card */
-            price: "₽45",
+            price: "50",
             /* @tweakable Detailed description for the first event */
             details: "Уникальное мероприятие, где вы сможете познакомиться с современными технологиями и их применением в повседневной жизни. Включает в себя практические семинары и демонстрации.",
+            /* @tweakable Time of the first event */
+            time: "19:00"
         },
         {
             /* @tweakable Title of the second card */
@@ -63,6 +65,8 @@ const config = {
             price: "Бесплатно",
             /* @tweakable Detailed description for the second event */
             details: "Детальное описание мероприятия...",
+            /* @tweakable Time of the second event */
+            time: "21:30"
         },
         {
             /* @tweakable Title of the third card */
@@ -73,9 +77,11 @@ const config = {
             /* @tweakable Badge text for the third card */
             badge: "Послезавтра",
             /* @tweakable Price for the third card */
-            price: "₽25",
+            price: "25",
             /* @tweakable Detailed description for the third event */
             details: "Детальное описание мероприятия...",
+            /* @tweakable Time of the third event */
+            time: "14:00"
         },
         {
             /* @tweakable Title of the fourth card */
@@ -86,9 +92,11 @@ const config = {
             /* @tweakable Badge text for the fourth card */
             badge: "Завтра",
             /* @tweakable Price for the fourth card */
-            price: "₽50",
+            price: "50",
             /* @tweakable Detailed description for the fourth event */
             details: "Детальное описание мероприятия...",
+            /* @tweakable Time of the fourth event */
+            time: "22:00"
         },
         {
             /* @tweakable Title of the fifth card */
@@ -99,9 +107,11 @@ const config = {
             /* @tweakable Badge text for the fifth card */
             badge: "Сегодня",
             /* @tweakable Price for the fifth card */
-            price: "₽35",
+            price: "35",
             /* @tweakable Detailed description for the fifth event */
             details: "Детальное описание мероприятия...",
+            /* @tweakable Time of the fifth event */
+            time: "18:00"
         },
         {
             /* @tweakable Title of the sixth card */
@@ -112,9 +122,11 @@ const config = {
             /* @tweakable Badge text for the sixth card */
             badge: "Завтра",
             /* @tweakable Price for the sixth card */
-            price: "₽25",
+            price: "25",
             /* @tweakable Detailed description for the sixth event */
             details: "Детальное описание мероприятия...",
+            /* @tweakable Time of the sixth event */
+            time: "12:30"
         },
         {
             /* @tweakable Title of the seventh card */
@@ -125,9 +137,11 @@ const config = {
             /* @tweakable Badge text for the seventh card */
             badge: "10.05.2024",
             /* @tweakable Price for the seventh card */
-            price: "₽30",
+            price: "30",
             /* @tweakable Detailed description for the seventh event */
             details: "Детальное описание мероприятия...",
+             /* @tweakable Time of the seventh event */
+            time: "15:00"
         },
         {
             /* @tweakable Title of the eighth card */
@@ -138,9 +152,11 @@ const config = {
             /* @tweakable Badge text for the eighth card */
             badge: "11.05.2024",
             /* @tweakable Price for the eighth card */
-            price: "₽40",
+            price: "40",
             /* @tweakable Detailed description for the eighth event */
             details: "Детальное описание мероприятия...",
+             /* @tweakable Time of the eighth event */
+            time: "20:00"
         },
         {
             /* @tweakable Title of the ninth card */
@@ -154,6 +170,8 @@ const config = {
             price: "Бесплатно",
             /* @tweakable Detailed description for the ninth event */
             details: "Детальное описание мероприятия...",
+             /* @tweakable Time of the ninth event */
+            time: "10:00"
         }
     ],
     /* @tweakable Font settings for the app */
@@ -170,7 +188,13 @@ const config = {
         /* @tweakable Timing function for animations */
         timingFunction: 'ease',
         /* @tweakable Delay before showing details */
-        detailsDelay: 150
+        detailsDelay: 150,
+        /* @tweakable Animation duration for hiding details */
+        hideDetailsDuration: 300, 
+        /* @tweakable Animation duration for sphere hover effect */
+        sphereHoverDuration: 200, 
+        /* @tweakable Animation duration for details appearance */
+        detailsAppearanceDuration: 300, 
     }
 };
 
