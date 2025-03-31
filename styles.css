@@ -91,7 +91,7 @@ body {
     box-shadow: 0 4px 12px var(--shadow-color);
     background-size: cover;
     background-position: center;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease; 
 }
 
 .card-image::before {
@@ -262,6 +262,36 @@ header {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Flexible grid layout */
 }
 
+.load-more-container {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: var(--card-radius);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.load-more-container:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.load-more-container i {
+    color: var(--secondary-color);
+    transition: transform 0.3s ease;
+}
+
+.load-more-container:hover i {
+    /* @tweakable Scale factor for icon hover effect */
+    transform: scale(1.1);
+}
+
+.card.load-more-card {
+    /* @tweakable Transition duration for load more card */
+    transition: opacity 0.3s ease;
+}
+
 /* Adjust the grid for larger screens */
 /* Media query for smaller screens (e.g., mobile) */
 @media (max-width: 480px) {
@@ -336,7 +366,6 @@ header {
 }
 
 .popup-sphere {
-    /* @tweakable Size of the clickable sphere */
     width: 60px;
     height: 60px;
     background: rgba(255, 255, 255, 0.9);
@@ -344,8 +373,7 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* @tweakable Animation duration for sphere hover effect */
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease; 
     cursor: pointer;
 }
 
@@ -354,10 +382,13 @@ header {
 }
 
 .popup-sphere i {
-    /* @tweakable Size of the arrow icon */
     font-size: 24px;
-    /* @tweakable Color of the arrow icon */
     color: #000;
+    transition: transform 0.2s ease;
+}
+
+.popup-sphere:hover i {
+    transform: scale(1.2);
 }
 
 .card-details {
@@ -367,7 +398,7 @@ header {
     height: 100%;
     opacity: 0;
     transform: translateX(20px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease; 
     display: none;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
