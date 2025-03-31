@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
             this.hideTimeout = null;
             this.lastScrollPosition = window.scrollY;
             this.initializeApp();
-            this.setupScrollListener();
+            this.setupCardInteractions();
             this.setupClickOutsideListener();
         }
 
@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
             this.renderHeader();
             this.renderNavigation();
             this.renderCards();
-            this.setupCardInteractions();
         }
 
         renderHeader() {
@@ -155,14 +154,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // Set arrow direction based on details position
             const arrow = card.querySelector('.popup-sphere i');
             if (arrow) {
-                /* @tweakable Arrow direction classes */
+                /* @tweakable Arrow direction classes [CSS classes to control the arrow direction in the card popup sphere] */
                 arrow.className = isRightSide ? 'fas fa-arrow-right' : 'fas fa-arrow-left';
             }
 
             this.showCardDetails(targetCard, this.config.cardData[index]);
 
             // Set auto-hide timeout
-            /* @tweakable Time in milliseconds before details auto-hide */
+            /* @tweakable Time in milliseconds before details auto-hide [Delay in milliseconds before automatically hiding the card details panel after it's shown] */
             const AUTO_HIDE_DELAY = 5000;
             this.hideTimeout = setTimeout(() => {
                 this.hideCardDetails();
@@ -186,43 +185,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return tempCard;
         }
 
-        setupScrollListener() {
-            /* @tweakable Scroll threshold in pixels before hiding details */
-            const SCROLL_THRESHOLD = 50;
-            /* @tweakable Scroll check delay in milliseconds */
-            const SCROLL_CHECK_DELAY = 150;
-            
-            let scrollTimeout;
-            let touchStartY = 0;
-
-            // Handle scroll events
-            window.addEventListener('scroll', () => {
-                clearTimeout(scrollTimeout);
-                
-                scrollTimeout = setTimeout(() => {
-                    const currentScroll = window.scrollY;
-                    if (Math.abs(currentScroll - this.lastScrollPosition) > SCROLL_THRESHOLD) {
-                        this.hideCardDetails();
-                    }
-                    this.lastScrollPosition = currentScroll;
-                }, SCROLL_CHECK_DELAY);
-            });
-
-            // Handle touch events for mobile
-            document.addEventListener('touchstart', (e) => {
-                touchStartY = e.touches[0].clientY;
-            });
-
-            document.addEventListener('touchmove', (e) => {
-                const touchCurrentY = e.touches[0].clientY;
-                /* @tweakable Touch movement threshold for hiding details */
-                const TOUCH_THRESHOLD = 30;
-                
-                if (Math.abs(touchCurrentY - touchStartY) > TOUCH_THRESHOLD) {
-                    this.hideCardDetails();
-                }
-            });
-        }
 
         setupClickOutsideListener() {
             document.addEventListener('click', (event) => {
@@ -232,13 +194,22 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
+        /**
+         * Hides the active card's details panel.
+         *
+         * This function handles the logic for closing the detailed information panel
+         * associated with a card. It removes the 'active' class from the card,
+         * which triggers the CSS transition to hide the details. It also resets
+         * the activeCard property and restores the original content of the card
+         * after the animation completes.
+         */
         hideCardDetails() {
             if (this.activeCard) {
                 this.activeCard.classList.remove('active');
                 const details = document.querySelector('.card-details.active');
                 if (details) {
                     details.classList.remove('active');
-                    /* @tweakable Animation duration for hiding details */
+                    /* @tweakable Animation duration for hiding details [Duration of the animation when hiding the card details panel in milliseconds] */
                     const ANIMATION_DURATION = this.config.animations.hideDetailsDuration; // Use config value for animation duration
 
                     setTimeout(() => {
