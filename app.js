@@ -205,25 +205,29 @@ document.addEventListener('DOMContentLoaded', () => {
          */
         hideCardDetails() {
             if (this.activeCard) {
-                this.activeCard.classList.remove('active');
                 const details = document.querySelector('.card-details.active');
                 if (details) {
+                    // Сначала запускаем анимацию исчезновения
                     details.classList.remove('active');
-                    /* @tweakable Animation duration for hiding details [Duration of the animation when hiding the card details panel in milliseconds] */
-                    const ANIMATION_DURATION = this.config.animations.hideDetailsDuration; // Use config value for animation duration
-
-                    setTimeout(() => {
-                        const parentCard = details.closest('.card');
-                        if (parentCard) {
-                            // Remove temporary card if it exists
-                            if (parentCard.classList.contains('temporary-card')) {
-                                parentCard.remove();
-                            } else {
-                                this.restoreOriginalContent(parentCard);
+                    
+                    // Ждем завершения анимации через transitionend
+                    const transitionEndHandler = (e) => {
+                        if (e.propertyName === 'opacity') {
+                            details.removeEventListener('transitionend', transitionEndHandler);
+                            
+                            const parentCard = details.closest('.card');
+                            if (parentCard) {
+                                if (parentCard.classList.contains('temporary-card')) {
+                                    parentCard.remove();
+                                } else {
+                                    this.restoreOriginalContent(parentCard);
+                                }
                             }
                         }
-                    }, ANIMATION_DURATION);
+                    };
+                    details.addEventListener('transitionend', transitionEndHandler);
                 }
+                this.activeCard.classList.remove('active');
                 this.activeCard = null;
             }
         }
@@ -252,9 +256,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 targetCard.dataset.originalContent = originalContent;
             }
         
-            // Animate in
+            // Добавляем обработчик для синхронизации анимации появления
             requestAnimationFrame(() => {
                 details.classList.add('active');
+                
+                // Принудительно запускаем перерисовку для корректной анимации
+                details.offsetHeight; // Trigger reflow
             });
         }
 
@@ -293,29 +300,48 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         restoreOriginalContent(card) {
-            // Check if it's the load more button card
-            if (card.classList.contains('load-more-card')) {
-                // Re-generate the load more button
-                card.innerHTML = this.createLoadMoreButton();
-                
-                // Re-attach event listener to the new button
-                const loadMoreBtn = document.getElementById('loadMoreButton');
-                if (loadMoreBtn) {
-                    loadMoreBtn.addEventListener('click', () => {
-                        /* @tweakable Number of new cards to load */
-                        const CARDS_TO_LOAD = 3;
-                        alert(`Загрузка дополнительных ${CARDS_TO_LOAD} мероприятий...`);
-                        // Actual loading logic would go here
-                    });
+            requestAnimationFrame(() => {
+                if (card.classList.contains('load-more-card')) {
+                    // Обработка кнопки "Загрузить еще"
+                    const newContent = this.createLoadMoreButton();
+                    card.innerHTML = newContent;
+                    
+                    // Повторная привязка обработчика
+                    const loadMoreBtn = card.querySelector('#loadMoreButton');
+                    if (loadMoreBtn) {
+                        loadMoreBtn.addEventListener('click', () => {
+                            const CARDS_TO_LOAD = 3;
+                            alert(`Загрузка ${CARDS_TO_LOAD} мероприятий...`);
+                        });
+                    }
+                } else {
+                    // Восстановление обычных карточек
+                    const index = Array.from(card.parentElement.children).indexOf(card);
+                    const cardData = this.config.cardData[index];
+                    
+                    if (cardData) {
+                        // Создаем временный контейнер для анимации
+                        const tempContainer = document.createElement('div');
+                        tempContainer.innerHTML = this.createCardHTML(cardData, index);
+                        
+                        // Анимация появления
+                        const newContent = tempContainer.firstElementChild;
+                        newContent.style.opacity = 0;
+                        newContent.style.transform = 'scale(0.95)';
+                        
+                        // Замена содержимого
+                        card.innerHTML = '';
+                        card.appendChild(newContent);
+                        
+                        // Запуск анимации
+                        requestAnimationFrame(() => {
+                            newContent.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+                            newContent.style.opacity = 1;
+                            newContent.style.transform = 'scale(1)';
+                        });
+                    }
                 }
-                return;
-            }
-            
-            // For regular cards
-            const cardData = this.config.cardData[Array.from(card.parentElement.children).indexOf(card)];
-            if (cardData) {
-                card.innerHTML = this.createCardHTML(cardData, Array.from(card.parentElement.children).indexOf(card));
-            }
+            });
         }
     }
 
