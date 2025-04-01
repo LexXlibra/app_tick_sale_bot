@@ -323,6 +323,11 @@ header {
     cursor: pointer;
 }
 
+.card > * {
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    will-change: transform, opacity;
+}
+
 .card-title {
     font-family: var(--title-font);
     font-weight: 700;
@@ -392,25 +397,21 @@ header {
 }
 
 .card-details {
-    background: var(--bg-color);
-    border-radius: var(--card-radius);
-    padding: 20px;
-    height: 100%;
+    /* Начальное состояние */
     opacity: 0;
-    transform: translateX(20px);
-    transition: opacity 0.3s ease, transform 0.3s ease; 
-    display: none;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    max-width: calc(100vw - 32px);
-    max-height: 100%;
-    overflow-y: auto;
+    transform: scale(0.9) translateY(20px);
+    transition: 
+        opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    visibility: hidden;
+    will-change: opacity, transform;
 }
 
 .card-details.active {
+    /* Конечное состояние */
     opacity: 1;
-    transform: translateX(0);
-    display: block;
+    transform: scale(1) translateY(0);
+    visibility: visible;
 }
 
 .card-details-title {
