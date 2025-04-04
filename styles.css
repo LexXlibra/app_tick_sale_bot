@@ -1,0 +1,674 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Roboto+Slab:wght@400;700&display=swap');
+
+@font-face {
+    font-family: 'NauryzRedKeds';
+    src: url('path/to/NauryzRedKedsFont.woff2') format('woff2'),
+         url('path/to/NauryzRedKedsFont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+    -webkit-tap-highlight-color: transparent; /* Prevent blue highlight on touch */
+    user-select: none; /* Prevent text selection */
+}
+
+:root {
+    /* Color palette */
+    /* @tweakable Primary color of the app */
+    --primary-color: #000;
+    /* @tweakable Secondary color used for text and icons */
+    --secondary-color: #8e8e93;
+    /* @tweakable Background color of the app */
+    --bg-color: #fff;
+    /* @tweakable Background color for tabs */
+    --tab-bg: #f2f2f7;
+    /* @tweakable Background color for active tabs */
+    --active-tab-bg: #e5e5ea;
+
+    /* @tweakable Card colors */
+    --card-colors: {
+        blue: #d1e7f7,
+        orange: #ff9500,
+        pink: #ff2d55,
+        white: #f2f2f7,
+        purple: #af52de
+    };
+
+    /* Consistent sizing and spacing */
+    /* @tweakable Radius of card corners */
+    --card-radius: 12px;
+    /* @tweakable Color of shadows */
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    /* @tweakable Base spacing unit */
+    --base-spacing: 16px;
+    /* @tweakable Font family for small text elements */
+    --small-font: 'NauryzRedKeds', sans-serif;
+    /* @tweakable Font family for headers */
+    --header-font: 'Fatalist', serif; /* Consider removing if not used */
+    /* @tweakable Font family for titles */
+    --title-font: 'Oswald', sans-serif;
+    /* @tweakable Font family for body text */
+    --body-font: 'Roboto Slab', serif;
+}
+
+body {
+    background-color: var(--bg-color);
+}
+
+.app-container {
+    max-width: 480px;
+    margin: 0 auto;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-color);
+    user-select: none;
+    -webkit-touch-callout: none; /* Prevent callout on long-press */
+}
+
+/* Reusable utility classes */
+.text-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.blur-backdrop {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+/* Card and image overlay styles */
+.card-image {
+    aspect-ratio: 1 / 1;
+    border-radius: var(--card-radius);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.3s ease; 
+}
+
+.card-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.5)); */
+    opacity: 0.7;
+}
+
+/* Event Category Indicators */
+.category-indicators {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    display: flex;
+    gap: 4px;
+    z-index: 5;
+}
+
+.indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    /* @tweakable Size of the indicator icons */
+    width: 20px;
+    height: 20px;
+}
+
+.indicator i {
+    color: white;
+    /* @tweakable Font size for indicator icons */
+    font-size: 10px;
+}
+
+.indicator-age {
+    background-color: #007aff; /* Blue */
+}
+
+.indicator-discount {
+    background-color: #34c759; /* Green */
+}
+
+.indicator-bonus {
+    background-color: #ff9500; /* Orange */
+}
+
+.indicator-dress-code {
+    background-color: #ff4081; /* Pink */
+}
+
+.indicator-price-increase {
+    background-color: #f44336; /* Red */
+}
+
+.indicator-popular {
+    background-color: #f44336; /* Red */
+}
+
+.indicator-featured {
+    background-color: #ffeb3b; /* Yellow */
+    color: black;
+}
+
+.indicator-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    margin-bottom: 8px;
+}
+
+.indicator:hover .indicator-tooltip {
+    opacity: 1;
+}
+
+/* Refresh Animation */
+@keyframes refreshRotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.refreshing {
+    animation: refreshRotate 1s linear infinite;
+}
+
+/* Card Loading Animation */
+@keyframes cardLoadingPulse {
+    0% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 0.8;
+    }
+    100% {
+        opacity: 0.6;
+    }
+}
+
+.card-placeholder {
+    height: 100%;
+    background-color: #f0f0f0;
+    border-radius: var(--card-radius);
+    animation: cardLoadingPulse 1.5s infinite;
+}
+
+.badge {
+    position: absolute;
+    top: 10px;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: 12px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 500;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    font-family: var(--small-font);
+}
+
+.time-badge {
+    left: 10px;
+    display: flex;
+    align-items: center;
+    bottom: 10px;
+    top: auto;
+}
+
+.time-badge i {
+    margin-right: 5px;
+}
+
+.price-badge {
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
+.price-badge i {
+    margin-right: 5px;
+}
+
+header {
+    padding: 20px 16px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.title-container {
+    padding-left: 16px;
+}
+
+.back-button {
+    font-size: 20px;
+    margin-right: 20px;
+    padding-top: 10px;
+}
+
+.title-container h1 {
+    font-family: var(--header-font);
+    letter-spacing: -1px;
+    font-size: 38px;
+}
+
+.title-container h2 {
+    font-family: var(--header-font);
+    letter-spacing: -1px;
+    font-size: 32px;
+}
+
+.time {
+    font-size: 12px;
+    font-weight: normal;
+    vertical-align: super;
+    font-family: var(--small-font);
+}
+
+.tabs-container {
+    display: flex;
+    padding: 0 16px;
+    margin-bottom: 20px;
+}
+
+.tab {
+    background-color: var(--tab-bg);
+    border: none;
+    border-radius: 20px;
+    padding: 8px 20px;
+    margin-right: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.tab.active {
+    background-color: var(--active-tab-bg);
+    font-weight: 600;
+}
+
+.section {
+    padding: 0 16px;
+    flex-grow: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.section-header h3 {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+}
+
+.view-all {
+    color: var(--primary-color);
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    display: none;
+}
+
+.view-all:hover {
+    opacity: 1;
+}
+
+.card-grid {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 5px;
+    overflow-x: visible;
+    cursor: default;
+    scroll-behavior: auto;
+    overscroll-behavior-x: auto;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Flexible grid layout */
+}
+
+.load-more-container {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: var(--card-radius);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.load-more-container:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.load-more-container i {
+    color: var(--secondary-color);
+    transition: transform 0.3s ease;
+}
+
+.load-more-container:hover i {
+    /* @tweakable Scale factor for icon hover effect */
+    transform: scale(1.1);
+}
+
+.card.load-more-card {
+    /* @tweakable Transition duration for load more card */
+    transition: opacity 0.3s ease;
+}
+
+/* Adjust the grid for larger screens */
+/* Media query for smaller screens (e.g., mobile) */
+@media (max-width: 480px) {
+    .card-grid {
+        grid-template-columns: repeat(2, 1fr); /* Two columns on smaller screens */
+    }
+    .indicator {
+        /* @tweakable Mobile indicator size */
+        width: 16px;
+        height: 16px;
+    }
+    
+    .indicator i {
+        /* @tweakable Mobile indicator icon size */
+        font-size: 8px;
+    }
+}
+
+/* Media query for larger screens (desktop) */
+@media (min-width: 481px) {
+    .app-container {
+        max-width: 1200px; /* Increased max-width for larger screens */
+    }
+
+    .card-grid {
+        grid-template-columns: repeat(4, 1fr); /* Four columns on larger screens */
+    }
+    .indicator {
+        /* @tweakable Desktop indicator size */
+        width: 20px;
+        height: 20px;
+    }
+    
+    .indicator i {
+        /* @tweakable Desktop indicator icon size */
+        font-size: 10px;
+    }
+}
+
+.card-grid:last-of-type {
+    margin-bottom: 15px;
+}
+
+.card {
+    width: 100%;
+    min-width: auto;
+    transition: none;
+    position: relative;
+    cursor: pointer;
+    /* @tweakable Animation for card appearance */
+    animation: cardAppear 0.5s ease-out forwards;
+    transform-origin: center;
+}
+
+@keyframes cardAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes cardDisappear {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+}
+
+@keyframes detailsAppear {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes detailsDisappear {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}
+
+.card-title {
+    font-family: var(--title-font);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+}
+
+.card-subtitle {
+    font-family: var(--body-font);
+    font-size: 13px;
+    color: var(--secondary-color);
+    font-weight: 400;
+    font-family: var(--small-font);
+}
+
+.card-popup-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    border-radius: var(--card-radius);
+}
+
+.card.active .card-popup-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.popup-sphere {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s ease; 
+    cursor: pointer;
+}
+
+/* @tweakable Scaling factor on sphere hover */
+.popup-sphere:hover {
+    transform: scale(1.1);
+}
+
+.popup-sphere i {
+    font-size: 24px;
+    color: #000;
+    transition: transform 0.2s ease;
+}
+
+/* @tweakable Scaling factor on arrow hover */
+.popup-sphere:hover i {
+    transform: scale(1.2);
+}
+
+.card-details {
+    background: var(--bg-color);
+    border-radius: var(--card-radius);
+    padding: 20px;
+    height: 100%;
+    opacity: 0;
+    transform: translateX(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease; 
+    display: none;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    max-width: calc(100vw - 32px);
+    max-height: 100%;
+    overflow-y: auto;
+    /* @tweakable Animation for details appearance */
+    animation: detailsAppear 0.4s ease-out forwards;
+}
+
+.card-details.active {
+    opacity: 1;
+    transform: translateX(0);
+    display: block;
+}
+
+.card-details.hiding {
+    /* @tweakable Animation for details disappearance */
+    animation: detailsDisappear 0.3s ease-in forwards;
+}
+
+.card.hiding {
+    /* @tweakable Animation for card disappearance */
+    animation: cardDisappear 0.3s ease-in forwards;
+}
+
+.card-details-title {
+    font-family: var(--title-font);
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.card-details-description {
+    font-family: var(--body-font);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--secondary-color);
+}
+
+/* Media query for mobile devices */
+@media (max-width: 480px) {
+    .card-details {
+        padding: 15px;
+        font-size: 14px;
+        max-height: 200px;
+    }
+
+    .card-details-title {
+        font-size: 16px;
+    }
+
+    .card-details-description {
+        font-size: 13px;
+        line-height: 1.4;
+    }
+}
+
+.bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    padding: 15px 0 20px;
+    background-color: var(--bg-color);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: var(--secondary-color);
+    font-size: 11px;
+    font-weight: 500;
+    transition: color 0.2s, transform 0.1s;
+}
+
+.nav-item i {
+    font-size: 22px;
+    margin-bottom: 4px;
+}
+
+.nav-item span {
+    font-family: var(--small-font);
+}
+
+.nav-item.active {
+    color: var(--primary-color);
+}
+
+@media (max-width: 390px),
+       (max-width: 375px),
+       (max-width: 320px),
+       (min-width: 481px) {
+    .card {
+        min-width: auto;
+        width: 100%;
+    }
+}

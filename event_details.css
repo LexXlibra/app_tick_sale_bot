@@ -1,0 +1,350 @@
+/* Event Details Page Styles */
+
+/* Header customization for event page */
+.event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+}
+
+.back-button a {
+    color: var(--primary-color);
+    font-size: 20px;
+    text-decoration: none;
+}
+
+.share-button {
+    font-size: 20px;
+    padding: 8px;
+    cursor: pointer;
+}
+
+/* Event details section with padding for content */
+.event-details-section {
+    padding-bottom: 80px;
+}
+
+/* Event banner with background image */
+.event-banner {
+    position: relative;
+    /* @tweakable Banner height as percentage of viewport height */
+    height: 30vh;
+    min-height: 180px;
+    background-image: url('https://img.freepik.com/premium-vector/single-page-application-abstract-concept-vector-illustration_107173-25232.jpg?ga=GA1.1.1220801245.1743447506&semt=ais_hybrid');
+    background-size: cover;
+    background-position: center;
+    border-radius: var(--card-radius);
+    padding: 20px;
+    margin-bottom: 20px;
+    /* @tweakable Banner gradient overlay intensity */
+    background-color: rgba(0, 0, 0, 0.3);
+    background-blend-mode: multiply;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    animation: bannerAppear 0.8s ease-out forwards;
+}
+
+@keyframes bannerAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.event-title {
+    color: white;
+    font-family: var(--title-font);
+    font-size: 28px;
+    font-weight: 700;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    margin-bottom: 10px;
+    animation: titleAppear 0.8s ease-out forwards;
+    animation-delay: 0.2s;
+    opacity: 0;
+}
+
+@keyframes titleAppear {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.event-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 15px;
+    animation: metaAppear 0.8s ease-out forwards;
+    animation-delay: 0.3s;
+    opacity: 0;
+}
+
+@keyframes metaAppear {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.event-date, .event-price {
+    background-color: rgba(255, 255, 255, 0.85);
+    color: var(--primary-color);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.event-date i, .event-price i {
+    margin-right: 5px;
+}
+
+.event-time {
+    font-weight: 600;
+}
+
+.ticket-button {
+    /* @tweakable Ticket button width */
+    width: calc(100% - 40px);
+    max-width: 300px;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: buttonAppear 0.8s ease-out forwards;
+    animation-delay: 0.4s;
+    opacity: 0;
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    right: 0;
+    /* @tweakable Hover scale factor for ticket button */
+    --hover-scale: 1.05;
+}
+
+@keyframes buttonAppear {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.ticket-button:hover {
+    background-color: #333;
+    transform: scale(var(--hover-scale));
+}
+
+.ticket-button i {
+    margin-right: 8px;
+}
+
+/* Event description section */
+.event-description {
+    margin: 30px 0 20px;
+    animation: contentAppear 0.8s ease-out forwards;
+    animation-delay: 0.5s;
+    opacity: 0;
+}
+
+@keyframes contentAppear {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.event-description h3 {
+    font-family: var(--title-font);
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.event-description p {
+    font-family: var(--body-font);
+    color: var(--secondary-color);
+    line-height: 1.6;
+    font-size: 15px;
+}
+
+/* Participants section */
+.participants-section {
+    margin: 30px 0;
+    animation: contentAppear 0.8s ease-out forwards;
+    animation-delay: 0.6s;
+    opacity: 0;
+}
+
+.participants-section h3 {
+    font-family: var(--title-font);
+    font-size: 18px;
+    margin-bottom: 15px;
+    margin-top: 25px;
+}
+
+.profiles-row {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    margin-bottom: 5px;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+}
+
+.profile-card {
+    flex: 0 0 auto;
+    width: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    scroll-snap-align: start;
+    /* @tweakable Profile card animation delay increment */
+    --animation-delay-increment: 0.1s;
+}
+
+.profile-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
+    /* @tweakable Profile image border thickness */
+    border: 2px solid white;
+}
+
+.profile-card:hover .profile-image {
+    transform: scale(1.1);
+}
+
+.profile-name {
+    font-size: 12px;
+    text-align: center;
+    color: var(--secondary-color);
+    max-width: 70px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Map section */
+.map-section {
+    margin: 30px 0;
+    animation: contentAppear 0.8s ease-out forwards;
+    animation-delay: 0.7s;
+    opacity: 0;
+}
+
+.map-section h3 {
+    font-family: var(--title-font);
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.event-map {
+    height: 200px;
+    border-radius: var(--card-radius);
+    margin-bottom: 10px;
+    /* @tweakable Map border style */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: #f8f8f8;
+}
+
+.map-address {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: var(--secondary-color);
+}
+
+.map-address i {
+    margin-right: 8px;
+    color: #f44336;
+}
+
+/* Media queries for responsive design */
+@media (min-width: 768px) {
+    .event-banner {
+        height: 40vh;
+    }
+    
+    .event-title {
+        font-size: 36px;
+    }
+    
+    .profiles-row {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+    
+    .event-map {
+        height: 300px;
+    }
+}
+
+/* Animation timing adjustments */
+.profiles-row .profile-card:nth-child(1) {
+    animation: profileAppear 0.5s ease-out forwards;
+    animation-delay: calc(0.7s + (1 * var(--animation-delay-increment)));
+    opacity: 0;
+}
+
+.profiles-row .profile-card:nth-child(2) {
+    animation: profileAppear 0.5s ease-out forwards;
+    animation-delay: calc(0.7s + (2 * var(--animation-delay-increment)));
+    opacity: 0;
+}
+
+.profiles-row .profile-card:nth-child(3) {
+    animation: profileAppear 0.5s ease-out forwards;
+    animation-delay: calc(0.7s + (3 * var(--animation-delay-increment)));
+    opacity: 0;
+}
+
+@keyframes profileAppear {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

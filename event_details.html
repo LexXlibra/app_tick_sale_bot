@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Детали мероприятия</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="event_details.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=your_api_key&lang=ru_RU" type="text/javascript"></script>
+</head>
+<body>
+    <div class="app-container">
+        <header class="blur-backdrop event-header">
+            <div class="back-button">
+                <a href="index.html"><i class="fas fa-arrow-left"></i></a>
+            </div>
+            <div class="title-container">
+                <h1>Мероприятие</h1>
+            </div>
+            <div class="share-button">
+                <i class="fas fa-share-alt"></i>
+            </div>
+        </header>
+
+        <div class="section event-details-section">
+            <div class="event-banner">
+                <div class="category-indicators" id="eventIndicators">
+                    <!-- Indicators will be added by JavaScript -->
+                </div>
+                <h2 class="event-title">Фандари Дискей</h2>
+                <div class="event-meta">
+                    <span class="event-date"><i class="far fa-calendar-alt"></i> Сегодня, <span class="event-time">В 21:30</span></span>
+                    <span class="event-price"><i class="fas fa-tag"></i> Бесплатно</span>
+                </div>
+                <div class="ticket-button" id="buyTicketBtn">
+                    <i class="fas fa-ticket-alt"></i> Купить билет
+                </div>
+            </div>
+            
+            <div class="event-description">
+                <h3>О мероприятии</h3>
+                <p>Уникальное мероприятие, где вы сможете познакомиться с современными технологиями и их применением в повседневной жизни. Включает в себя практические семинары и демонстрации.</p>
+            </div>
+
+            <div class="participants-section">
+                <h3>Организаторы</h3>
+                <div class="profiles-row">
+                    <div class="profile-card">
+                        <div class="profile-image" style="background-image: url('https://img.freepik.com/free-photo/business-team-looking-papers_23-2147656178.jpg')"></div>
+                        <div class="profile-name">TechEvent</div>
+                    </div>
+                    <div class="profile-card">
+                        <div class="profile-image" style="background-image: url('https://img.freepik.com/free-photo/businessman-suit-glasses-standing-with-arms-crossed_176474-98232.jpg')"></div>
+                        <div class="profile-name">Creative Lab</div>
+                    </div>
+                </div>
+                
+                <h3>Место проведения</h3>
+                <div class="profiles-row">
+                    <div class="profile-card">
+                        <div class="profile-image" style="background-image: url('https://img.freepik.com/free-photo/business-center-building_186202-178.jpg')"></div>
+                        <div class="profile-name">Ул. Алтавес</div>
+                    </div>
+                </div>
+                
+                <h3>Участники</h3>
+                <div class="profiles-row">
+                    <div class="profile-card">
+                        <div class="profile-image" style="background-image: url('https://img.freepik.com/free-photo/portrait-confident-man_102671-5909.jpg')"></div>
+                        <div class="profile-name">Иван Петров</div>
+                    </div>
+                    <div class="profile-card">
+                        <div class="profile-image" style="background-image: url('https://img.freepik.com/free-photo/beautiful-young-woman-standing-outdoors_23-2150183887.jpg')"></div>
+                        <div class="profile-name">Анна Соколова</div>
+                    </div>
+                    <div class="profile-card">
+                        <div class="profile-image" style="background-image: url('https://img.freepik.com/free-photo/person-expressing-positivity-happiness_23-2150676757.jpg')"></div>
+                        <div class="profile-name">Максим Волков</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="map-section">
+                <h3>Карта</h3>
+                <div id="eventMap" class="event-map"></div>
+                <div class="map-address">
+                    <i class="fas fa-map-marker-alt"></i> 
+                    <span>Ул. Алтавес, 42, Москва</span>
+                </div>
+            </div>
+        </div>
+
+        <nav class="bottom-nav blur-backdrop">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Главная</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-search"></i>
+                <span>Поиск</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-heart"></i>
+                <span>Избранное</span>
+            </a>
+            <a href="#" class="nav-item active">
+                <i class="fas fa-ticket-alt"></i>
+                <span>Билеты</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-user"></i>
+                <span>Профиль</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="eventIndicators.js"></script>
+    <script src="event_details.js"></script>
+</body>
+</html>
